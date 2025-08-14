@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Automação</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .automation-list {
+            margin-top: 30px;
+        }
+        
+        .automation-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .automation-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .automation-item p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .automation-item .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .status.active {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status.inactive {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .message-preview {
+            background: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+        
+        .test-section {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #48bb78;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .notification.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Painel de Automação</h1>
+            <p>Configure suas automações de WhatsApp e e-mail</p>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('whatsapp')">WhatsApp</div>
+            <div class="tab" onclick="showTab('email')">E-mail</div>
+            <div class="tab" onclick="showTab('agendamento')">Agendamento</div>
+        </div>
+        
+        <!-- WhatsApp Tab -->
+        <div id="whatsapp" class="tab-content active">
+            <h3>Configurar Automação de WhatsApp</h3>
+            
+            <div class="form-group">
+                <label>Número de Telefone</label>
+                <input type="tel" id="whatsapp-number" placeholder="5511999999999">
+            </div>
+            
+            <div class="form-group">
+                <label>Mensagem de Boas-Vindas</label>
+                <textarea id="welcome-message" rows="3" placeholder="Olá! Bem-vindo(a) à nossa loja! Como posso ajudar?">Olá! Bem-vindo(a) à nossa loja! Como posso ajudar?</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Respostas Automáticas</label>
+                <div id="auto-responses">
+                    <div class="response-item">
+                        <input type="text" placeholder="Palavra-chave" class="keyword">
+                        <input type="text" placeholder="Resposta" class="response">
+                        <button type="button" onclick="addResponse()" class="btn">+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button class="btn btn-success" onclick="saveWhatsAppConfig()">Salvar Configuração</button>
+            </div>
+            
+            <div class="test-section">
+                <h3>Testar Automação</h3>
+                <div class="form-group">
+                    <label>Enviar mensagem teste para:</label>
+                    <input type="tel" id="test-number" placeholder="5511999999999">
+                </div>
+                <div class="form-group">
+                    <label>Mensagem:</label>
+                    <textarea id="test-message" rows="2" placeholder="Mensagem de teste">Esta é uma mensagem de teste da automação!</textarea>
+                </div>
+                <button class="btn" onclick="sendTestMessage()">Enviar Mensagem Teste</button>
+            </div>
+        </div>
+        
+        <!-- Email Tab -->
+        <div id="email" class="tab-content">
+            <h3>Configurar Automação de E-mail</h3>
+            <p>Funcionalidade em desenvolvimento...</p>
+        </div>
+        
+        <!-- Agendamento Tab -->
+        <div id="agendamento" class="tab-content">
+            <h3>Configurar Agendamentos</h3>
+            <p>Funcionalidade em desenvolvimento...</p>
+        </div>
+        
+        <!-- Lista de Automações -->
+        <div class="automation-list">
+            <h3>Minhas Automações</h3>
+            <div id="automations-list">
+                <div class="automation-item">
+                    <h4>📱 WhatsApp - Boas-Vindas</h4>
+                    <p>Envia mensagem de boas-vindas automaticamente</p>
+                    <div class="message-preview">Olá! Bem-vindo(a) à nossa loja! Como posso ajudar?</div>
+                    <div class="actions">
+                        <span class="status active">Ativo</span>
+                        <button class="btn">Editar</button>
+                        <button class="btn">Testar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // Dados das automações
+        let automations = JSON.parse(localStorage.getItem('automations') || '[]');
+        
+        // Função para mostrar abas
+        function showTab(tabName) {
+            // Esconder todas as abas
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar aba selecionada
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Função para adicionar resposta automática
+        function addResponse() {
+            const responsesDiv = document.getElementById('auto-responses');
+            const newResponse = document.createElement('div');
+            newResponse.className = 'response-item';
+            newResponse.innerHTML = `
+                <input type="text" placeholder="Palavra-chave" class="keyword">
+                <input type="text" placeholder="Resposta" class="response">
+                <button type="button" onclick="this.parentElement.remove()" class="btn">-</button>
+            `;
+            responsesDiv.appendChild(newResponse);
+        }
+        
+        // Função para salvar configuração do WhatsApp
+        function saveWhatsAppConfig() {
+            const number = document.getElementById('whatsapp-number').value;
+            const welcomeMessage = document.getElementById('welcome-message').value;
+            
+            const responses = [];
+            document.querySelectorAll('.response-item').forEach(item => {
+                const keyword = item.querySelector('.keyword').value;
+                const response = item.querySelector('.response').value;
+                if (keyword && response) {
+                    responses.push({ keyword, response });
+                }
+            });
+            
+            const automation = {
+                id: Date.now(),
+                type: 'whatsapp',
+                number,
+                welcomeMessage,
+                responses,
+                active: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            automations.push(automation);
+            localStorage.setItem('automations', JSON.stringify(automations));
+            
+            updateAutomationsList();
+            showNotification('Configuração salva com sucesso!');
+        }
+        
+        // Função para enviar mensagem de teste
+        function sendTestMessage() {
+            const number = document.getElementById('test-number').value;
+            const message = document.getElementById('test-message').value;
+            
+            if (!number || !message) {
+                showNotification('Preencha todos os campos!', 'error');
+                return;
+            }
+            
+            // Simular envio de mensagem
+            console.log('Enviando mensagem para:', number);
+            console.log('Mensagem:', message);
+            
+            // Aqui você integraria com a API real do WhatsApp
+            // Por enquanto, apenas simulamos
+            showNotification('Mensagem enviada com sucesso!');
+            
+            // Salvar no histórico
+            const history = JSON.parse(localStorage.getItem('message-history') || '[]');
+            history.push({
+                to: number,
+                message,
+                timestamp: new Date().toISOString(),
+                status: 'sent'
+            });
+            localStorage.setItem('message-history', JSON.stringify(history));
+        }
+        
+        // Função para atualizar lista de automações
+        function updateAutomationsList() {
+            const list = document.getElementById('automations-list');
+            const whatsappAutomations = automations.filter(a => a.type === 'whatsapp');
+            
+            if (whatsappAutomations.length === 0) {
+                list.innerHTML = '<p>Nenhuma automação configurada ainda.</p>';
+                return;
+            }
+            
+            list.innerHTML = whatsappAutomations.map(auto => `
+                <div class="automation-item">
+                    <h4>📱 WhatsApp - Boas-Vindas</h4>
+                    <p>Configurado para o número: ${auto.number}</p>
+                    <div class="message-preview">${auto.welcomeMessage}</div>
+                    <div class="actions">
+                        <span class="status ${auto.active ? 'active' : 'inactive'}">
+                            ${auto.active ? 'Ativo' : 'Inativo'}
+                        </span>
+                        <button class="btn" onclick="editAutomation(${auto.id})">Editar</button>
+                        <button class="btn" onclick="toggleAutomation(${auto.id})">
+                            ${auto.active ? 'Desativar' : 'Ativar'}
+                        </button>
+                        <button class="btn" onclick="testAutomation(${auto.id})">Testar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Função para mostrar notificação
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAutomationsList();
+        });
+    </script>
+</body>
+</html>
