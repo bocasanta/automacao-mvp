@@ -1,51 +1,37 @@
+<!-- Substitua o botão "Começar Grátis" por: -->
+<div class="cta-buttons">
+    <button class="cta-button" onclick="window.location.href='/painel.html'">
+        Acessar Painel
+    </button>
+    <button class="cta-button secondary" onclick="showSignup()">
+        Cadastrar E-mail
+    </button>
+</div>
+
+<!-- Adicione este estilo: -->
+<style>
+.cta-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 60px;
+}
+
+.cta-button.secondary {
+    background: transparent;
+    border: 2px solid #FFD700;
+    color: #FFD700;
+}
+
+.cta-button.secondary:hover {
+    background: #FFD700;
+    color: #333;
+}
+</style>
+
+<!-- Adicione este script: -->
 <script>
-function handleSubmit(event) {
-    event.preventDefault();
-    const email = event.target.querySelector('input[type="email"]').value;
-    
-    // Salvar no localStorage
-    const emails = JSON.parse(localStorage.getItem('signups') || '[]');
-    emails.push({
-        email: email,
-        date: new Date().toISOString()
-    });
-    localStorage.setItem('signups', JSON.stringify(emails));
-    
-    // Mostrar na tela
-    document.body.innerHTML = `
-        <div style="
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #FFD700;
-            color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            z-index: 9999;
-        ">
-            <h2>Obrigado, ${email}!</h2>
-            <p>Cadastro realizado com sucesso!</p>
-            <button onclick="location.href='/obrigado.html'" 
-                    style="
-                        margin-top: 10px;
-                        padding: 10px 20px;
-                        background: #333;
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                    ">
-                Continuar
-            </button>
-        </div>
-    `;
-    
-    // Redirecionar após 3 segundos
-    setTimeout(() => {
-        window.location.href = '/obrigado.html';
-    }, 3000);
+function showSignup() {
+    document.querySelector('.signup-form').style.display = 'flex';
 }
 </script>
