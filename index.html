@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automação Fácil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .subtitle {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .signup-form {
+            display: flex;
+            gap: 10px;
+            max-width: 400px;
+            margin: 0 auto 60px;
+        }
+        .signup-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+        }
+        .signup-form button {
+            padding: 15px 30px;
+            background: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .signup-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .feature h3 {
+            margin-top: 0;
+            color: #FFD700;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Automação Fácil</h1>
+        <p class="subtitle">Automatize seu negócio sem complicação</p>
+        
+        <form class="signup-form" onsubmit="handleSubmit(event)">
+            <input type="email" placeholder="Seu melhor e-mail" required>
+            <button type="submit">Começar Grátis</button>
+        </form>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>📱 WhatsApp</h3>
+                <p>Respostas automáticas 24h</p>
+            </div>
+            <div class="feature">
+                <h3>📧 E-mail</h3>
+                <p>Sequências de marketing</p>
+            </div>
+            <div class="feature">
+                <h3>⏰ Agendamento</h3>
+                <p>Organize sua agenda</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            
+            // Salvar no localStorage (temporário)
+            const emails = JSON.parse(localStorage.getItem('signups') || '[]');
+            emails.push({
+                email: email,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('signups', JSON.stringify(emails));
+            
+            // Redirecionar para página de obrigado
+            window.location.href = '/obrigado.html';
+            
+            alert('Obrigado por se cadastrar! Redirecionando...');
+        }
+    </script>
+</body>
+</html>
