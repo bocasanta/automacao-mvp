@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Automação Fácil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .email-list {
+            margin-top: 20px;
+        }
+        .email-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .email-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .no-emails {
+            color: #666;
+            font-style: italic;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Painel Administrativo</h1>
+        <p>E-mails cadastrados:</p>
+        <div id="emailList" class="email-list"></div>
+        <a href="/" class="back-button">Voltar para o site</a>
+    </div>
+    
+    <script>
+        function loadEmails() {
+            const emails = JSON.parse(localStorage.getItem('signups') || '[]');
+            const emailList = document.getElementById('emailList');
+            
+            if (emails.length === 0) {
+                emailList.innerHTML = '<p class="no-emails">Nenhum e-mail cadastrado ainda.</p>';
+                return;
+            }
+            
+            emailList.innerHTML = emails.map(email => `
+                <div class="email-item">
+                    <span>${email.email}</span>
+                    <span class="email-date">${new Date(email.date).toLocaleString()}</span>
+                </div>
+            `).join('');
+        }
+        
+        // Carregar e-mails quando a página abrir
+        loadEmails();
+    </script>
+</body>
+</html>
